@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "myrke-189201"
+  },
+  "targets": {
+    "myrke-189201": {
+      "hosting": {
+        "ngapp": [
+          "ngrke2"
+        ],
+        "static": [
+          "myrke-189201"
+        ]
+      }
+    }
   }
 }
