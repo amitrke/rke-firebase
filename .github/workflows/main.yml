@@ -17,6 +17,9 @@ jobs:
       - name: Build Functions
         run: npm run build
         working-directory: ./functions
+      - name: Functions remove dev dependency
+        run: npm prune --production
+        working-directory: ./functions
       - name: Install Dependencies for AngularApp
         run: export NG_CLI_ANALYTICS=ci && npm install
         working-directory: ./ngapp
