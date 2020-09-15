@@ -28,6 +28,11 @@ jobs:
         with:
           name: ngdist
           path: ngapp/dist
+      - name: Archive Functions
+        uses: actions/upload-artifact@master
+        with:
+          name: functions
+          path: functions
       - name: Archive Production StaticWeb Artifact
         uses: actions/upload-artifact@master
         with:
@@ -45,20 +50,19 @@ jobs:
         with:
           name: ngdist
           path: ngapp/dist
-      - name: Deploy Angular app to Firebase
-        uses: w9jds/firebase-action@master
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@master
         with:
-          args: deploy --only hosting:ngapp
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          name: functions
+          path: functions
       - name: Download StaticWeb Artifact
         uses: actions/download-artifact@master
         with:
           name: staticweb
           path: public
-      - name: Deploy StaticWeb to Firebase
+      - name: Deploy
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:static
+          args: deploy
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
