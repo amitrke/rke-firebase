@@ -13,24 +13,16 @@ jobs:
         uses: actions/checkout@master
       - name: Install Dependencies for Functions
         run: npm install
-        with:
-          name: functions
-          path: functions
+        working-directory: ./functions
       - name: Build Functions
         run: npm run build
-        with:
-          name: functions
-          path: functions
+        working-directory: ./functions
       - name: Install Dependencies for AngularApp
-        run: npm install
-        with:
-          name: ngapp
-          path: ngapp
+        run: export NG_CLI_ANALYTICS=ci && npm install
+        working-directory: ./ngapp
       - name: Build AngularApp
         run: npm run build
-        with:
-          name: ngapp
-          path: ngapp
+        working-directory: ./ngapp
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
