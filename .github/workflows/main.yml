@@ -11,15 +11,31 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Install Dependencies
+      - name: Install Dependencies for Functions
         run: npm install
-      - name: Build
-        run: npm run build-prod
+        with:
+          name: functions
+          path: functions
+      - name: Build Functions
+        run: npm run build
+        with:
+          name: functions
+          path: functions
+      - name: Install Dependencies for AngularApp
+        run: npm install
+        with:
+          name: ngapp
+          path: ngapp
+      - name: Build AngularApp
+        run: npm run build
+        with:
+          name: ngapp
+          path: ngapp
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: dist
-          path: dist
+          name: ngapp/dist
+          path: ngapp/dist
   deploy:
     name: Deploy
     needs: build
@@ -37,4 +53,4 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
