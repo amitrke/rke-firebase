@@ -5,8 +5,8 @@ on:
       - master
 
 jobs:
-  build_functions:
-    name: Build Functions
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -17,90 +17,16 @@ jobs:
       - name: Build Functions
         run: npm run build
         working-directory: ./functions
-      - name: Archive Functions
-        uses: actions/upload-artifact@master
-        with:
-          name: functions
-          path: functions
-  build_angular:
-    name: Build Angular
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
       - name: Install Dependencies for AngularApp
         run: export NG_CLI_ANALYTICS=ci && npm install
         working-directory: ./ngapp
       - name: Build AngularApp
         run: npm run build
         working-directory: ./ngapp
-      - name: Archive Production Angular Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: ngdist
-          path: ngapp/dist
-  build_staticweb:
-    name: Build StaticWeb
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Archive Production StaticWeb Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: staticweb
-          path: public
-  deploy_functions:
-    name: Deploy Functions
-    needs: build_functions
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Functions Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: functions
-          path: functions
       - name: Deploy
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only functions
+          args: deploy
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-  deploy_staticweb:
-    name: Deploy StaticWeb
-    needs: build_staticweb
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download StaticWeb Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: staticweb
-          path: public
-      - name: Deploy
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting:static
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-  deploy_angular:
-    name: Deploy Angular
-    needs: build_angular
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Angular Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: ngdist
-          path: ngapp/dist
-      - name: Deploy
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting:ngapp
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  
