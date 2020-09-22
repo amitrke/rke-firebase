@@ -1,0 +1,32 @@
+.toolbar-fill-remaining-space {
+    flex: 1 1 auto;
+}
+.toolbar-space {
+    width: 1 1 auto;
+}
+
+main {
+    padding: 5px;
+    min-height: 70%;
+    min-height: -webkit-calc(100% - 128px);
+    min-height: -moz-calc(100% - 128px);
+    min-height: calc(100% - 128px);
+}
+
+header {
+
+    .website-name {
+        padding-left: 5px;
+        text-decoration : none;
+        color : white;
+    }
+
+}
+
+footer {
+    a {
+        padding-left: 5px;
+        text-decoration : none;
+        color : white;
+    }
+}

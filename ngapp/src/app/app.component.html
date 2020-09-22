@@ -1,1 +1,37 @@
-<app-user-profile></app-user-profile>
+<header>
+    <mat-toolbar color="primary">
+        <button mat-icon-button>
+            <mat-icon>menu</mat-icon>
+        </button>
+        <a routerLink="/home" class="website-name">Roorkee.org</a>
+        <span class="toolbar-fill-remaining-space"></span>
+        <div *ngIf="auth.user$ | async; then authenticated else guest">
+            <!-- template will replace this div -->
+        </div>
+    </mat-toolbar>
+</header>
+<main>
+    <app-user-profile></app-user-profile>
+    <router-outlet></router-outlet>
+</main>
+<footer>
+    <mat-toolbar color="primary">
+        <span class="toolbar-fill-remaining-space"></span>
+        <a routerLink="/privacy">Privacy Policy</a>
+        &nbsp;:&nbsp;
+        <a routerLink="/disclaimer">Disclaimer</a>
+    </mat-toolbar>
+</footer>
+
+<ng-template #guest>
+    <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+    </button>
+</ng-template>
+
+<ng-template #authenticated>
+    <div *ngIf="auth.user$ | async as user" >
+        <span style="float: left; padding-right: 1em;">{{ user.name }}</span>
+        <img [src]="user.photoURL" width="50" style="border-radius: 50%;">
+    </div>
+</ng-template>
