@@ -1,0 +1,7 @@
+<form [formGroup]="postForm">
+    <label>
+        Title:
+        <input type="text" formControlName="title">
+    </label>
+    <angular-editor formControlName="body" [config]="editorConfig"></angular-editor>
+</form>
