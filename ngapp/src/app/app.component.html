@@ -1,7 +1,17 @@
 <header>
     <mat-toolbar color="primary">
-        <button mat-icon-button color="primary" aria-label="Example icon button with a menu icon">
-            <mat-icon color="primary">menu</mat-icon>
+        <mat-menu #appMenu="matMenu">
+            <button mat-menu-item routerLink="/newpost">
+                <mat-icon>account_circle</mat-icon>
+                <span>New Post</span>
+            </button>
+            <button mat-menu-item routerLink="/myphotos">
+                <mat-icon>account_circle</mat-icon>
+                <span>My Photos</span>
+            </button>
+        </mat-menu>
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>more_vert</mat-icon>
         </button>
         <a routerLink="/home" class="website-name">Roorkee.org</a>
         <span class="toolbar-fill-remaining-space"></span>
@@ -11,7 +21,6 @@
     </mat-toolbar>
 </header>
 <main>
-    <app-user-profile></app-user-profile>
     <router-outlet></router-outlet>
 </main>
 <footer>
