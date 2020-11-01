@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MyphotosComponent } from './myphotos/myphotos.component';
 
 const config = {
   apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
@@ -33,7 +34,8 @@ const config = {
     AppComponent,
     UserProfileComponent,
     PosteditorComponent,
-    HomeComponent
+    HomeComponent,
+    MyphotosComponent
   ],
   imports: [
     BrowserModule,
