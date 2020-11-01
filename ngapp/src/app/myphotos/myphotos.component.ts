@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SnapshotAction } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -25,13 +26,13 @@ export class MyphotosComponent implements OnInit {
   public uploadProgress;
   public downloadURL: Observable<string>;
   public meta: Observable<any>;
-  public photos: Observable<Photo[]> = new Observable();
+  public photos: Observable<SnapshotAction<Photo>[]> = new Observable();
 
   ngOnInit(): void {
     const classThis = this;
     this.auth.user$.subscribe({
       next(user){
-        classThis.photos = classThis.photoService.listValueChanges();
+        classThis.photos = classThis.photoService.list();
         console.log(`Subscribed to photo changes`);
         classThis.photos.subscribe({
           next(photo){

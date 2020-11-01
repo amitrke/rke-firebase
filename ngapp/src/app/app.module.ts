@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MyphotosComponent } from './myphotos/myphotos.component';
+import { PhotoComponent } from './photo/photo.component';
 
 const config = {
   apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
@@ -35,7 +36,8 @@ const config = {
     UserProfileComponent,
     PosteditorComponent,
     HomeComponent,
-    MyphotosComponent
+    MyphotosComponent,
+    PhotoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { BaseModel } from './models/base.model';
@@ -27,13 +27,18 @@ export abstract class BaseService<T extends BaseModel> {
     return true;
   }
 
-  public list() {
+  public list(): Observable<SnapshotAction<T>[]>  {
     const listRef = this.db.list<T>(`${this.dbPath}/${this.user.uid}`);
-    return listRef.valueChanges();
+    return listRef.snapshotChanges();
   }
 
   public listValueChanges(): Observable<T[]> {
     const listRef = this.db.list<T>(`${this.dbPath}/${this.user.uid}`);
     return listRef.valueChanges();
+  }
+
+  public async listItemDelete(key: string): Promise<void> {
+    const listRef = this.db.list<T>(`${this.dbPath}/${this.user.uid}`);
+    return listRef.remove(key);
   }
 }

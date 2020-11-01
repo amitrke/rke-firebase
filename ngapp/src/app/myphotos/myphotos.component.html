@@ -11,6 +11,6 @@ Your photos
 
 <div id="photos">
     <div class="photo" *ngFor="let photo of photos | async">
-        {{ photo.filename }}
+        <app-photo [photo]="photo.payload" [thumb]="true"></app-photo>
      </div>
 </div>
