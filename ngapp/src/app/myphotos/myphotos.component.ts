@@ -44,7 +44,17 @@ export class MyphotosComponent implements OnInit {
   }
 
   async upload(event, user) {
-    this.ref = this.afStorage.ref(`/users/${user.uid}/${event.target.files[0].name}`);
+    const userUploadedFilename: string = event.target.files[0].name;
+    const filenameDotSplit = userUploadedFilename.split(".");
+    let filename = userUploadedFilename;
+    if (filenameDotSplit.length > 2){
+      let fileNmWoExtnAry = [];
+      for (let i=0; i<filenameDotSplit.length-1; i++){
+        fileNmWoExtnAry.push(filenameDotSplit[i]);
+      }
+      filename = fileNmWoExtnAry.join("-")+`.${filenameDotSplit[filenameDotSplit.length-1]}`;
+    }
+    this.ref = this.afStorage.ref(`/users/${user.uid}/${filename}`);
     this.task = this.ref.put(event.target.files[0]);
     this.uploadProgress = this.task.percentageChanges();
     const classThis = this;
@@ -55,7 +65,7 @@ export class MyphotosComponent implements OnInit {
           this.meta.subscribe({
             next(md) {
               const photo = new Photo(md.fullPath, md.name, md.updated);
-              classThis.photoService.put(photo, user.uid);
+              classThis.photoService.push(photo);
             }
           });
           

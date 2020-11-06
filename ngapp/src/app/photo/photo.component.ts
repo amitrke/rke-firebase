@@ -42,7 +42,8 @@ export class PhotoComponent implements OnInit {
     //Delete photo thumb
     const thumbRef = this.storage.ref(Photo.getThumbPath(this.photoObj.path));
     thumbRef.delete();
-
+    const medRef = this.storage.ref(Photo.getMedPath(this.photoObj.path));
+    medRef.delete();
     //Delete db ref
     this.photoService.listItemDelete(this.photo.key);
   }
