@@ -20,11 +20,15 @@ export abstract class BaseService<T extends BaseModel> {
       })
   }
 
-  public async put(item: T, userid?: string): Promise<boolean> {
-    const path = userid ? `${this.dbPath}/${userid}` : this.dbPath;
+  public async push(item: T): Promise<firebase.database.Reference> {
+    const path = `${this.dbPath}/${this.user.uid}`;
     const itemsRef = await this.db.list(path);
-    await itemsRef.push(item);
-    return true;
+    return await itemsRef.push(item);
+  }
+
+  public async listItemUpdate(key: string, item: T): Promise<void> {
+    const listRef = this.db.list<T>(`${this.dbPath}/${this.user.uid}`);
+    return listRef.update(key, item);
   }
 
   public list(): Observable<SnapshotAction<T>[]>  {

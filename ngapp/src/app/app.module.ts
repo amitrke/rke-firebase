@@ -18,6 +18,10 @@ import { HomeComponent } from './home/home.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MyphotosComponent } from './myphotos/myphotos.component';
 import { PhotoComponent } from './photo/photo.component';
+import { PostComponent } from './post/post.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 const config = {
   apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
@@ -37,7 +41,8 @@ const config = {
     PosteditorComponent,
     HomeComponent,
     MyphotosComponent,
-    PhotoComponent
+    PhotoComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,10 @@ const config = {
     MatIconModule,
     AngularEditorModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
