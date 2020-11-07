@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AuthService } from '../auth.service';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public postService: PostService,
+    public auth: AuthService
+  ) { }
 
   ngOnInit(): void {
   }

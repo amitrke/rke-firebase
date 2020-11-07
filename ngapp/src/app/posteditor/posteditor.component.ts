@@ -80,12 +80,7 @@ export class PosteditorComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    const classThis = this;
-    this.auth.user$.subscribe({
-      next(user) {
-        classThis.posts = classThis.postService.list();
-      }
-    });
+    this.posts = this.postService.items;
   }
 
   async save() {
