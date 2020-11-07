@@ -17,7 +17,7 @@ export class MyphotosComponent implements OnInit {
   constructor(
     private afStorage: AngularFireStorage,
     public auth: AuthService,
-    private photoService: PhotoService
+    public photoService: PhotoService
   ) { }
   
   
@@ -26,21 +26,8 @@ export class MyphotosComponent implements OnInit {
   public uploadProgress;
   public downloadURL: Observable<string>;
   public meta: Observable<any>;
-  public photos: Observable<SnapshotAction<Photo>[]> = new Observable();
 
   ngOnInit(): void {
-    const classThis = this;
-    this.auth.user$.subscribe({
-      next(user){
-        classThis.photos = classThis.photoService.list();
-        console.log(`Subscribed to photo changes`);
-        classThis.photos.subscribe({
-          next(photo){
-            console.log(`Photo data ${JSON.stringify(photo)}`);
-          }
-        });
-      }
-    });
   }
 
   async upload(event, user) {

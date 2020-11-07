@@ -10,7 +10,7 @@
 Your photos
 
 <div id="photos">
-    <div class="photo" *ngFor="let photo of photos | async">
+    <div class="photo" *ngFor="let photo of photoService.items | async">
         <app-photo [photo]="photo.payload" [thumb]="true"></app-photo>
      </div>
 </div>
