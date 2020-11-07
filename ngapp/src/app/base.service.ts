@@ -7,6 +7,7 @@ import { User } from './models/user.model';
 export abstract class BaseService<T extends BaseModel> {
 
   protected user: User;
+  public items: Observable<SnapshotAction<T>[]>;
 
   constructor(
     protected db: AngularFireDatabase,
@@ -20,10 +21,10 @@ export abstract class BaseService<T extends BaseModel> {
       })
   }
 
-  public async push(item: T): Promise<firebase.database.Reference> {
+  public async push(item: T): Promise<firebase.default.database.Reference> {
     const path = `${this.dbPath}/${this.user.uid}`;
-    const itemsRef = await this.db.list(path);
-    return await itemsRef.push(item);
+    const itemsRef = this.db.list(path);
+    return itemsRef.push(item);
   }
 
   public async listItemUpdate(key: string, item: T): Promise<void> {

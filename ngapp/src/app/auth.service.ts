@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from './models/user.model'; // optional
 
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 
@@ -33,7 +33,7 @@ export class AuthService {
     }
 
     async googleSignin() {
-      const provider = new auth.GoogleAuthProvider();
+      const provider = new firebase.auth.GoogleAuthProvider();
       const credential = await this.afAuth.signInWithPopup(provider);
       return this.updateUserData(credential.user);
     }
