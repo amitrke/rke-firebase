@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SnapshotAction } from '@angular/fire/database';
+import { DataSnapshot } from '@angular/fire/database/interfaces';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -31,6 +32,7 @@ export class PosteditorComponent implements OnInit {
     title: new FormControl(''),
     intro: new FormControl(''),
     body: new FormControl(''),
+    publish: new FormControl(false),
   });
 
   editorConfig: AngularEditorConfig = {
@@ -126,5 +128,18 @@ export class PosteditorComponent implements OnInit {
         })
     )
     .subscribe()
+  }
+
+  onEdit(post: DataSnapshot){
+    this.editPostId = post.key;
+    const postObj: Post = post.val();
+    this.photoUrl = postObj.photoPath;
+    this.postForm.reset();
+    this.postForm.patchValue({
+      title: postObj.title,
+      intro: postObj.intro,
+      body: postObj.body,
+      publish: postObj.publish
+    });
   }
 }

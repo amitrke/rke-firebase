@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataSnapshot } from '@angular/fire/database/interfaces';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
@@ -14,6 +14,8 @@ import { PostService } from '../post.service';
 export class PostComponent implements OnInit {
 
   @Input() public post: DataSnapshot;
+  @Output() edit = new EventEmitter<DataSnapshot>();
+
   public postObj: Post;
   public photoUrl: Observable<string>;
   constructor(
@@ -28,6 +30,10 @@ export class PostComponent implements OnInit {
       const storageRef = this.storage.ref(path);
       this.photoUrl = storageRef.getDownloadURL();
     }
+  }
+
+  onEdit() {
+    this.edit.emit(this.post);
   }
 
   onDelete() {
