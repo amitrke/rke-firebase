@@ -93,6 +93,7 @@ export class PosteditorComponent implements OnInit {
       this.photoUrl, 
       new Date()
     );
+    post.publish = this.postForm.value.publish;
     if (this.editPostId){
       this.postService.listItemUpdate(this.editPostId, post);
     } else {

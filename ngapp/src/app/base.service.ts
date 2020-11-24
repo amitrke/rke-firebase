@@ -9,11 +9,14 @@ export abstract class BaseService<T extends BaseModel> {
 
   protected user: User;
   public items: Observable<SnapshotAction<T>[]> = new Observable();
+  public allUsersItems: Observable<SnapshotAction<any>[]> = new Observable();
 
   constructor(
     protected db: AngularFireDatabase,
     private dbPath: string,
     protected auth: AuthService) { 
+      const allUsersListRef = this.db.list<any>(`${this.dbPath}`);
+      this.allUsersItems = allUsersListRef.snapshotChanges();
       const classThis = this;
       this.items = this.auth.user$.pipe(
         switchMap(user => {

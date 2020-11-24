@@ -1,24 +1,25 @@
-<form [formGroup]="postForm">
-    <mat-form-field>
-        Title:
-        <input matInput type="text" formControlName="title">
-    </mat-form-field>
-    <br/>
-    <mat-form-field>
-        Intro:
-        <input matInput type="text" formControlName="intro">
-    </mat-form-field>
-    <br/>
-    <angular-editor formControlName="body" [config]="editorConfig"></angular-editor>
-    <mat-slide-toggle formControlName="publish"
-          class="example-margin"
-          color="primary"
-          >
-        Publish
-      </mat-slide-toggle>
-</form>
-
 <div *ngIf="auth.user$ | async as user">
+    <form [formGroup]="postForm">
+        <mat-form-field>
+            Title:
+            <input matInput type="text" formControlName="title">
+        </mat-form-field>
+        <br/>
+        <mat-form-field>
+            Intro:
+            <input matInput type="text" formControlName="intro">
+        </mat-form-field>
+        <br/>
+        <angular-editor formControlName="body" [config]="editorConfig"></angular-editor>
+        <mat-slide-toggle formControlName="publish"
+            class="example-margin"
+            color="primary"
+            >
+            Publish
+        </mat-slide-toggle>
+    </form>
+
+
     <div *ngIf="editPostId">
         <br/>
         <label for="file">File:</label>
@@ -26,16 +27,20 @@
         <progress max="100" [value]="(uploadProgress | async)"></progress>
         <br/>
     </div>
-</div>
-<br/>
-<button mat-button (click)="save()">Save</button>
-<button mat-button (click)="new()">Clear</button>
-<p></p>
 
-<h2>Your Posts</h2>
+    <br/>
+    <button mat-button (click)="save()">Save</button>
+    <button mat-button (click)="new()">Clear</button>
+    <p></p>
 
-<div id="posts">
-    <div class="post" *ngFor="let post of posts | async">
-        <app-post [post]="post.payload" (edit)="onEdit($event)"></app-post>
-     </div>
+    <h2>Your Posts</h2>
+
+    <div id="posts">
+        <div class="post" *ngFor="let post of posts | async">
+            <app-post [post]="post.payload" (edit)="onEdit($event)"></app-post>
+        </div>
+    </div>
 </div>
+
+
+
