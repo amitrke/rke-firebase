@@ -1,4 +1,6 @@
-export type UserDbItems = {
-    uid: string;
-    items: Array<{key: string, item: any}>;
+import { DatabaseSnapshot } from '@angular/fire/database';
+
+export type UserDbItem = {
+    userId: string;
+    itemSnapshot: DatabaseSnapshot<any>;
 }

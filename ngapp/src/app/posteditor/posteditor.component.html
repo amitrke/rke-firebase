@@ -2,12 +2,14 @@
     <form [formGroup]="postForm">
         <mat-form-field>
             Title:
-            <input matInput type="text" formControlName="title">
+            <input matInput type="text" formControlName="title" required>
+            <mat-error *ngIf="postForm.invalid">Title is required</mat-error>
         </mat-form-field>
         <br/>
         <mat-form-field>
             Intro:
-            <input matInput type="text" formControlName="intro">
+            <input matInput type="text" formControlName="intro" required>
+            <mat-error *ngIf="postForm.invalid">Intro is required</mat-error>
         </mat-form-field>
         <br/>
         <angular-editor formControlName="body" [config]="editorConfig"></angular-editor>
@@ -31,15 +33,9 @@
     <br/>
     <button mat-button (click)="save()">Save</button>
     <button mat-button (click)="new()">Clear</button>
+    <button mat-button >Cancel</button>
     <p></p>
 
-    <h2>Your Posts</h2>
-
-    <div id="posts">
-        <div class="post" *ngFor="let post of posts | async">
-            <app-post [post]="post.payload" (edit)="onEdit($event)"></app-post>
-        </div>
-    </div>
 </div>
 
 

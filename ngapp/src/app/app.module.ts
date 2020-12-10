@@ -24,6 +24,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MypostsComponent } from './myposts/myposts.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const config = {
   apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
@@ -44,7 +46,8 @@ const config = {
     HomeComponent,
     MyphotosComponent,
     PhotoComponent,
-    PostComponent
+    PostComponent,
+    MypostsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,8 @@ const config = {
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,12 +4,12 @@ import { switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { BaseModel } from './models/base.model';
 import { User } from './models/user.model';
-import { UserDbItems } from './models/types';
+import { UserDbItem } from './models/types';
 export abstract class BaseService<T extends BaseModel> {
 
   protected user: User;
   public items: Observable<SnapshotAction<T>[]> = new Observable();
-  public allUsersItems: Observable<UserDbItems[]> = new Observable();
+  public allUsersItems: Observable<UserDbItem[]> = new Observable();
 
   constructor(
     protected db: AngularFireDatabase,
@@ -20,17 +20,15 @@ export abstract class BaseService<T extends BaseModel> {
       
       this.allUsersItems = allUsersListRef.snapshotChanges().pipe(
         switchMap(rawAllUsersItems => {
-          const userDbItems: UserDbItems[][] = [];
+          const userDbItems: UserDbItem[][] = [];
           userDbItems[0] = [];
           rawAllUsersItems.forEach(rawUserItems => {
-            const userDbItem: UserDbItems = {uid: rawUserItems.key, items: []};
-            console.log(`userItems ${JSON.stringify(rawUserItems)}`);
-            rawUserItems.payload.forEach(rawItem => {
-              const item = {key: rawItem.key, item: rawItem.val()}
-              userDbItem.items.push(item);
-              return true;
+            const userId = rawUserItems.key;
+            rawUserItems.payload.forEach(itemSnapshot => {
+              const item:UserDbItem = {userId, itemSnapshot}
+              userDbItems[0].push(item);
+              return false;
             });
-            userDbItems[0].push(userDbItem);
           });
           return userDbItems;
         })
