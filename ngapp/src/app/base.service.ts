@@ -4,17 +4,36 @@ import { switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { BaseModel } from './models/base.model';
 import { User } from './models/user.model';
-
+import { UserDbItem } from './models/types';
 export abstract class BaseService<T extends BaseModel> {
 
   protected user: User;
   public items: Observable<SnapshotAction<T>[]> = new Observable();
+  public allUsersItems: Observable<UserDbItem[]> = new Observable();
 
   constructor(
     protected db: AngularFireDatabase,
     private dbPath: string,
     protected auth: AuthService) { 
       const classThis = this;
+      const allUsersListRef = this.db.list<any>(`${this.dbPath}`);
+      
+      this.allUsersItems = allUsersListRef.snapshotChanges().pipe(
+        switchMap(rawAllUsersItems => {
+          const userDbItems: UserDbItem[][] = [];
+          userDbItems[0] = [];
+          rawAllUsersItems.forEach(rawUserItems => {
+            const userId = rawUserItems.key;
+            rawUserItems.payload.forEach(itemSnapshot => {
+              const item:UserDbItem = {userId, itemSnapshot}
+              userDbItems[0].push(item);
+              return false;
+            });
+          });
+          return userDbItems;
+        })
+      )
+      
       this.items = this.auth.user$.pipe(
         switchMap(user => {
           const listRef = classThis.db.list<T>(`${classThis.dbPath}/${classThis.user.uid}`);

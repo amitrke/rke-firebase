@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { SnapshotAction } from '@angular/fire/database';
 import { DataSnapshot } from '@angular/fire/database/interfaces';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -21,7 +22,17 @@ export class PosteditorComponent implements OnInit {
     private postService: PostService,
     public auth: AuthService,
     private afStorage: AngularFireStorage,
-  ) { }
+    public dialogRef: MatDialogRef<PosteditorComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { 
+    if (data.new){
+      console.log(`New Post`);
+      this.postForm.reset();
+      delete this.editPostId;
+    } else if (data.edit) {
+      this.onEdit(data.edit);
+    }
+  }
 
   public posts: Observable<SnapshotAction<Post>[]> = new Observable();
   public uploadProgress;
@@ -29,9 +40,9 @@ export class PosteditorComponent implements OnInit {
   public editPostId: string;
 
   postForm = new FormGroup({
-    title: new FormControl(''),
-    intro: new FormControl(''),
-    body: new FormControl(''),
+    title: new FormControl('', Validators.required),
+    intro: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
     publish: new FormControl(false),
   });
 
@@ -39,7 +50,7 @@ export class PosteditorComponent implements OnInit {
     editable: true,
     spellcheck: true,
     height: 'auto',
-    minHeight: '0',
+    minHeight: '110px',
     maxHeight: 'auto',
     width: 'auto',
     minWidth: '0',
@@ -86,25 +97,29 @@ export class PosteditorComponent implements OnInit {
   }
 
   async save() {
-    const post = new Post(
-      this.postForm.value.title, 
-      this.postForm.value.intro, 
-      this.postForm.value.body, 
-      this.photoUrl, 
-      new Date()
-    );
-    if (this.editPostId){
-      this.postService.listItemUpdate(this.editPostId, post);
+    if (this.postForm.valid) {
+      const post = new Post(
+        this.postForm.value.title,
+        this.postForm.value.intro,
+        this.postForm.value.body,
+        this.photoUrl,
+        new Date()
+      );
+      post.publish = this.postForm.value.publish;
+      if (this.editPostId) {
+        this.postService.listItemUpdate(this.editPostId, post);
+      } else {
+        const resp = await this.postService.push(post);
+        this.editPostId = resp.key;
+      }
     } else {
-      const resp = await this.postService.push(post);
-      this.editPostId = resp.key;
+      console.log(this.postForm.errors);
     }
   }
 
-  new(){
+  new() {
     this.postForm.reset();
     delete this.editPostId;
-    
   }
 
   async upload(event, user) {
@@ -117,20 +132,20 @@ export class PosteditorComponent implements OnInit {
     this.uploadProgress = task.percentageChanges();
     const classThis = this;
     task.snapshotChanges().pipe(
-        finalize(() => {
-          const meta = ref.getMetadata();
-          meta.subscribe({
-            next(md) {
-              classThis.photoUrl = md.fullPath;
-            }
-          });
-          
-        })
+      finalize(() => {
+        const meta = ref.getMetadata();
+        meta.subscribe({
+          next(md) {
+            classThis.photoUrl = md.fullPath;
+          }
+        });
+
+      })
     )
-    .subscribe()
+      .subscribe()
   }
 
-  onEdit(post: DataSnapshot){
+  onEdit(post: DataSnapshot) {
     this.editPostId = post.key;
     const postObj: Post = post.val();
     this.photoUrl = postObj.photoPath;

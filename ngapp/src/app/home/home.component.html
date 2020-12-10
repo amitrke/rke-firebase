@@ -1,1 +1,7 @@
 <app-user-profile></app-user-profile>
+
+Posts
+
+<div class="post" *ngFor="let post of postService.allUsersItems | async">
+    <app-post [post]="post.itemSnapshot" [readonly]=true [userId]="post.userId"></app-post>
+</div>

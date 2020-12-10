@@ -10,7 +10,7 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button (click)="onEdit()">EDIT</button>
-      <button mat-button (click)="onDelete()">DELETE</button>
+      <button *ngIf="!readonly" mat-button (click)="onEdit()">EDIT</button>
+      <button *ngIf="!readonly" mat-button (click)="onDelete()">DELETE</button>
     </mat-card-actions>
   </mat-card>

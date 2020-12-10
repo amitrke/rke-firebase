@@ -1,0 +1,13 @@
+<div *ngIf="auth.user$ | async as user">
+    <h2>My Posts</h2>
+
+    <div id="posts">
+        <div class="post" *ngFor="let post of posts | async">
+            <app-post [post]="post.payload" (edit)="onEdit($event)" [readonly]=false></app-post>
+        </div>
+    </div>
+
+    <button (click)="onNew()" class="mat-fab-bottom-right" mat-fab>
+        <mat-icon class="icon">add</mat-icon>
+    </button>
+</div>

@@ -14,6 +14,8 @@ import { PostService } from '../post.service';
 export class PostComponent implements OnInit {
 
   @Input() public post: DataSnapshot;
+  @Input() public readonly: boolean;
+  @Input() public userId: string;
   @Output() edit = new EventEmitter<DataSnapshot>();
 
   public postObj: Post;
