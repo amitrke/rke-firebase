@@ -16,6 +16,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Srv account file
+        run: 'echo Hello World'
+      - name: Srv account file
         run: 'echo ${{ secrets.FIREBASE_SRVACC }} > staticupdater/src/srvacc.json'
       - name: Test Srv acc file
         run: 'echo staticupdater/src/srvacc.json | grep project_id'
