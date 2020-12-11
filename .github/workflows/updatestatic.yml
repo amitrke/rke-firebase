@@ -1,0 +1,19 @@
+name: UpdateStatic
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Bump Version
+        default: v1.0.0
+        required: false
+
+jobs:
+  build:
+    name: UpdateStatic
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Data
+        run: curl https://myrke-189201.firebaseio.com/posts.json > posts.json
