@@ -112,11 +112,16 @@ export class PosteditorComponent implements OnInit {
         const resp = await this.postService.push(post);
         this.editPostId = resp.key;
       }
+      this.dialogRef.close();
     } else {
       console.log(this.postForm.errors);
     }
   }
 
+  onCancel(){
+    this.dialogRef.close();
+  }
+  
   new() {
     this.postForm.reset();
     delete this.editPostId;
