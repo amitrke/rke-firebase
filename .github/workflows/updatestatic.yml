@@ -15,5 +15,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Download Data
-        run: curl https://myrke-189201.firebaseio.com/posts.json > posts.json
+      - name: Srv account file
+        run: echo ${{ secrets.FIREBASE_SRVACC }} > staticupdater/src/srvacc.json
+      - name: Test Srv acc file
+        run: echo staticupdater/src/srvacc.json | grep project_id
