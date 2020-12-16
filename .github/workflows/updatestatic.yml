@@ -17,5 +17,5 @@ jobs:
         uses: actions/checkout@master
       - name: Decrypt firebase admin json
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.GPG_PASS }}" --output staticupdater/firebase-adminsdk.json firebase-adminsdk.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.GPG_PASS }}" --output staticupdater/firebase-adminsdk.json staticupdater/firebase-adminsdk.json.gpg
 
