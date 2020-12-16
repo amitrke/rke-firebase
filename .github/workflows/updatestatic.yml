@@ -18,4 +18,10 @@ jobs:
       - name: Decrypt firebase admin json
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.GPG_PASS }}" --output staticupdater/firebase-adminsdk.json staticupdater/firebase-adminsdk.json.gpg
+      - name: Build StaticUpdater
+        run: npm run build
+        working-directory: ./staticupdater
+      - name: Run StaticUpdater
+        run: npm run start
+        working-directory: ./staticupdater
 
