@@ -12,6 +12,8 @@ var app = admin.initializeApp({
 });
 
 var db = admin.database();
+const storage = admin.storage();
+const bucket = storage.bucket('myrke-189201.appspot.com');
 
 async function readPosts(){
   var ref = db.ref("posts");
@@ -35,6 +37,7 @@ function processPosts(posts: any, users: any): any[]{
         if (post.body){
           post.body = entities.decode(post.body);
         }
+        post.id = postId;
         newPosts.push(post);
       }
     })
@@ -42,13 +45,25 @@ function processPosts(posts: any, users: any): any[]{
   return newPosts;
 }
 
-function generateFiles(posts: any) {
+async function generateFiles(posts: any) {
   const source = fs.readFileSync("./src/post.hbs", 'utf8');
   const template = handlebars.compile(source, { strict: true });
-  posts.forEach( (post:any) => {
+  posts.forEach( async (post:any) => {
     const datePath = post.updated.substring(0, 10);
     const result = template(post);
     const fileName = post.title.split(' ').join('-');
+    if (post.photoPath) {
+      const srcFilename = post.photoPath;
+      const destFilename = `../public/posts/${post.id}.jpg`; //Should be extracted from the source path.
+      const options = {
+        destination: destFilename,
+      };
+      // Downloads the file
+      await bucket.file(srcFilename).download(options);
+    }
+    
+
+    
     fs.writeFileSync(`../public/posts/${datePath}-${fileName}.html`, result);
   });
 }
@@ -57,7 +72,7 @@ async function asyncCall() {
   const posts = await readPosts();
   const users = await readUsers();
   const userPosts = processPosts(posts, users);
-  generateFiles(userPosts);
+  await generateFiles(userPosts);
   app.delete();
 }
 
