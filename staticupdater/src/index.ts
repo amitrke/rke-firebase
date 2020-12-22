@@ -46,8 +46,18 @@ function processPosts(posts: any, users: any): any[]{
 }
 
 async function generateFiles(posts: any) {
-  const source = fs.readFileSync("./src/post.hbs", 'utf8');
+  const source = fs.readFileSync("./src/templates/post.hbs", 'utf8');
+  const head = fs.readFileSync("./src/templates/partials/head.hbs", 'utf8');
+  const topNav = fs.readFileSync("./src/templates/partials/topNav.hbs", 'utf8');
+  const footer = fs.readFileSync("./src/templates/partials/footer.hbs", 'utf8');
+  const sidebar = fs.readFileSync("./src/templates/partials/sidebar.hbs", 'utf8');
+  handlebars.registerPartial('head', head);
+  handlebars.registerPartial('topNav', topNav);
+  handlebars.registerPartial('footer', footer);
+  handlebars.registerPartial('sidebar', sidebar);
+  
   const template = handlebars.compile(source, { strict: true });
+  
   posts.forEach( async (post:any) => {
     const datePath = post.updated.substring(0, 10);
     const result = template(post);
