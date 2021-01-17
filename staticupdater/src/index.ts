@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { HomepageConfig, RemoteConfigDefaultValueType } from './models/types';
 var serviceAccount = require("../firebase-adminsdk.json");
 var _ = require('lodash');
 const handlebars = require("handlebars");
@@ -12,29 +13,39 @@ var app = admin.initializeApp({
 });
 
 var db = admin.database();
+var remoteConfig = admin.remoteConfig();
 const storage = admin.storage();
 const bucket = storage.bucket('myrke-189201.appspot.com');
 
-async function readPosts(){
+const head = fs.readFileSync("./src/templates/partials/head.hbs", 'utf8');
+const topNav = fs.readFileSync("./src/templates/partials/topNav.hbs", 'utf8');
+const footer = fs.readFileSync("./src/templates/partials/footer.hbs", 'utf8');
+const sidebar = fs.readFileSync("./src/templates/partials/sidebar.hbs", 'utf8');
+handlebars.registerPartial('head', head);
+handlebars.registerPartial('topNav', topNav);
+handlebars.registerPartial('footer', footer);
+handlebars.registerPartial('sidebar', sidebar);
+
+async function readPosts() {
   var ref = db.ref("posts");
   const snapshot = await ref.once('value');
   return snapshot.val();
 }
 
-async function readUsers(){
+async function readUsers() {
   var ref = db.ref("users");
   const snapshot = await ref.once('value');
   return snapshot.val();
 }
 
-function processPosts(posts: any, users: any): any[]{
-  const newPosts:any[] = [];
-  _.forEach(posts, (userPosts:any, userId: string) => {
+function processPosts(posts: any, users: any): any[] {
+  const newPosts: any[] = [];
+  _.forEach(posts, (userPosts: any, userId: string) => {
     _.forEach(userPosts, (post: any, postId: string) => {
       console.log(`- ${postId}`);
-      if (post.publish && post.publish === true){
+      if (post.publish && post.publish === true) {
         post.userName = users[userId].name;
-        if (post.body){
+        if (post.body) {
           post.body = entities.decode(post.body);
         }
         post.id = postId;
@@ -45,20 +56,12 @@ function processPosts(posts: any, users: any): any[]{
   return newPosts;
 }
 
-async function generateFiles(posts: any) {
+async function generatePostFiles(posts: any) {
   const source = fs.readFileSync("./src/templates/post.hbs", 'utf8');
-  const head = fs.readFileSync("./src/templates/partials/head.hbs", 'utf8');
-  const topNav = fs.readFileSync("./src/templates/partials/topNav.hbs", 'utf8');
-  const footer = fs.readFileSync("./src/templates/partials/footer.hbs", 'utf8');
-  const sidebar = fs.readFileSync("./src/templates/partials/sidebar.hbs", 'utf8');
-  handlebars.registerPartial('head', head);
-  handlebars.registerPartial('topNav', topNav);
-  handlebars.registerPartial('footer', footer);
-  handlebars.registerPartial('sidebar', sidebar);
-  
+
   const template = handlebars.compile(source, { strict: true });
-  
-  posts.forEach( async (post:any) => {
+
+  posts.forEach(async (post: any) => {
     const datePath = post.updated.substring(0, 10);
     const result = template(post);
     const fileName = post.title.split(' ').join('-');
@@ -71,18 +74,33 @@ async function generateFiles(posts: any) {
       // Downloads the file
       await bucket.file(srcFilename).download(options);
     }
-    
 
-    
     fs.writeFileSync(`../public/posts/${datePath}-${fileName}.html`, result);
   });
+}
+
+async function generateHomepage(posts: any) {
+  const source = fs.readFileSync("./src/templates/home.hbs", 'utf8');
+  const template = handlebars.compile(source, { strict: true });
+  const remoteConfigTemplate = await remoteConfig.getTemplate();
+  const homepageConfigParam:RemoteConfigDefaultValueType = remoteConfigTemplate.parameters["webHomepage"] as RemoteConfigDefaultValueType;
+  const homepageConfig: HomepageConfig = JSON.parse(homepageConfigParam.defaultValue.value);
+  let homepagePost;
+  posts.forEach((post:any) => {
+    if (post["id"] == homepageConfig["mainPost"]){
+      homepagePost = post;
+    }
+  });
+  const result = template({homepagePost, homepageConfig});
+  fs.writeFileSync(`../public/index.html`, result);
 }
 
 async function asyncCall() {
   const posts = await readPosts();
   const users = await readUsers();
   const userPosts = processPosts(posts, users);
-  await generateFiles(userPosts);
+  await generatePostFiles(userPosts);
+  await generateHomepage(userPosts);
   app.delete();
 }
 
