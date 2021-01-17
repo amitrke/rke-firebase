@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+{{>head title="Roorkee.org : A city in North India, Home to the oldest Technical Institution of Asia" staticResLevel=""}}
+
+<body>
+    <div class="container">
+        {{>topNav}}
+        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+            <div class="col-md-6 px-0">
+                <h1 class="display-4 font-italic">{{homepageConfig.punchlineH1}}</h1>
+                <p class="lead my-3">{{homepageConfig.punchlineP}}
+                </p>
+                <p class="lead mb-0"><a href="{{homepageConfig.punchlineLink}}" class="text-white font-weight-bold">Continue ...</a></p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div
+                    class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary">World</strong>
+                        <h3 class="mb-0">Photo Gallery</h3>
+                        <div class="mb-1 text-muted">Nov 12</div>
+                        <p class="card-text mb-auto">Discover and upload awesome pictures of this beautiful town</p>
+                        <a href="#" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img class="bd-placeholder-img" width="200" height="250"
+                            src="https://source.unsplash.com/200x250/?india,ganges" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div
+                    class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Design</strong>
+                        <h3 class="mb-0">Town News</h3>
+                        <div class="mb-1 text-muted">Nov 11</div>
+                        <p class="mb-auto">Updated daily, get to know what's happening in town, IIT and nearby areas.</p>
+                        <a href="#" class="stretched-link">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img class="bd-placeholder-img" width="200" height="250"
+                            src="https://source.unsplash.com/200x250/?newspaper,india" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main role="main" class="container">
+        <div class="row">
+            <div class="col-md-8 blog-main">
+
+                <div class="blog-post">
+                    <h2 class="blog-post-title">{{homepagePost.title}}</h2>
+                    <p class="blog-post-meta">January 1, 2020 by <a href="#">{{homepagePost.userName}}</a></p>
+                    <img src="posts/{{homepagePost.id}}.jpg" style="max-width:500px" />
+                    <p>{{{homepagePost.body}}}</p>
+                </div><!-- /.blog-post -->
+
+            </div><!-- /.blog-main -->
+
+            {{>sidebar}}
+
+        </div><!-- /.row -->
+
+    </main><!-- /.container -->
+
+    {{>footer}}
+</body>
+
+</html>
