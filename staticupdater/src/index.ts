@@ -45,6 +45,15 @@ function processPosts(posts: any, users: any): any[] {
       console.log(`- ${postId}`);
       if (post.publish && post.publish === true) {
         const datePath = post.updated.substring(0, 10);
+        const displayDate = new Date(post.updated).toLocaleDateString(
+          'en-us',
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            timeZone: 'utc'
+          }
+        );
         const fileName = post.title.split(' ').join('-');
         post.userName = users[userId].name;
         if (post.body) {
@@ -52,6 +61,7 @@ function processPosts(posts: any, users: any): any[] {
         }
         post.htmlFilename = `${datePath}-${fileName}.html`;
         post.id = postId;
+        post.displayDate = displayDate;
         newPosts.push(post);
       }
     })
