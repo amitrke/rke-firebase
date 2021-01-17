@@ -44,11 +44,24 @@ function processPosts(posts: any, users: any): any[] {
     _.forEach(userPosts, (post: any, postId: string) => {
       console.log(`- ${postId}`);
       if (post.publish && post.publish === true) {
+        const datePath = post.updated.substring(0, 10);
+        const displayDate = new Date(post.updated).toLocaleDateString(
+          'en-us',
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            timeZone: 'utc'
+          }
+        );
+        const fileName = post.title.split(' ').join('-');
         post.userName = users[userId].name;
         if (post.body) {
           post.body = entities.decode(post.body);
         }
+        post.htmlFilename = `${datePath}-${fileName}.html`;
         post.id = postId;
+        post.displayDate = displayDate;
         newPosts.push(post);
       }
     })
@@ -62,9 +75,7 @@ async function generatePostFiles(posts: any) {
   const template = handlebars.compile(source, { strict: true });
 
   posts.forEach(async (post: any) => {
-    const datePath = post.updated.substring(0, 10);
-    const result = template(post);
-    const fileName = post.title.split(' ').join('-');
+    const result = template({ post, posts });
     if (post.photoPath) {
       const srcFilename = post.photoPath;
       const destFilename = `../public/posts/${post.id}.jpg`; //Should be extracted from the source path.
@@ -75,7 +86,7 @@ async function generatePostFiles(posts: any) {
       await bucket.file(srcFilename).download(options);
     }
 
-    fs.writeFileSync(`../public/posts/${datePath}-${fileName}.html`, result);
+    fs.writeFileSync(`../public/posts/${post.htmlFilename}`, result);
   });
 }
 
@@ -83,15 +94,15 @@ async function generateHomepage(posts: any) {
   const source = fs.readFileSync("./src/templates/home.hbs", 'utf8');
   const template = handlebars.compile(source, { strict: true });
   const remoteConfigTemplate = await remoteConfig.getTemplate();
-  const homepageConfigParam:RemoteConfigDefaultValueType = remoteConfigTemplate.parameters["webHomepage"] as RemoteConfigDefaultValueType;
+  const homepageConfigParam: RemoteConfigDefaultValueType = remoteConfigTemplate.parameters["webHomepage"] as RemoteConfigDefaultValueType;
   const homepageConfig: HomepageConfig = JSON.parse(homepageConfigParam.defaultValue.value);
   let homepagePost;
-  posts.forEach((post:any) => {
-    if (post["id"] == homepageConfig["mainPost"]){
+  posts.forEach((post: any) => {
+    if (post["id"] == homepageConfig["mainPost"]) {
       homepagePost = post;
     }
   });
-  const result = template({homepagePost, homepageConfig});
+  const result = template({ homepagePost, homepageConfig, posts });
   fs.writeFileSync(`../public/index.html`, result);
 }
 
