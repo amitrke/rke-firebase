@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 
-{{>head title=title staticResLevel="."}}
+{{>head title=post.title staticResLevel="."}}
 
 <body>
   <div class="container">
@@ -12,10 +12,10 @@
       <div class="col-md-8 blog-main">
 
         <div class="blog-post">
-          <h2 class="blog-post-title">{{title}}</h2>
-          <p class="blog-post-meta">January 1, 2020 by <a href="#">{{userName}}</a></p>
-          <img src="{{id}}.jpg" style="max-width:500px"/>
-          <p>{{{body}}}</p>
+          <h2 class="blog-post-title">{{post.title}}</h2>
+          <p class="blog-post-meta">January 1, 2020 by <a href="#">{{post.userName}}</a></p>
+          <img src="{{post.id}}.jpg" style="max-width:500px"/>
+          <p>{{{post.body}}}</p>
         </div><!-- /.blog-post -->
 
       </div><!-- /.blog-main -->
