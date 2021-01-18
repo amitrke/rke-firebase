@@ -12,7 +12,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-export const updateWeather = functions.pubsub.schedule('every 1 hour').onRun(async (context) => {
+export const updateWeather = functions.pubsub.schedule('every 120 minutes').onRun(async (context) => {
   functions.logger.info("Function updateWhether triggered", {structuredData: true});
   const service = new WeatherService();
   await service.updateDetail();
