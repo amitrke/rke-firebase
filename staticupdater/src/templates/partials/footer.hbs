@@ -5,3 +5,11 @@
       <a href="#">Back to top</a>
     </p>
   </footer>
+<script>
+      $.ajax({
+        url: "https://myrke-189201.firebaseio.com/weather/roorkee-in/current.json",
+        success: function( result ) {
+          $( "#weather-temp" ).html( "<strong>" + result.temp + "</strong> degrees <img src='http://openweathermap.org/img/wn/"+result.weather[0].icon+".png'>" );
+        }
+      });
+  </script>
