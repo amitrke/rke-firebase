@@ -51,7 +51,7 @@ export class PosteditorComponent implements OnInit {
     spellcheck: true,
     height: 'auto',
     minHeight: '110px',
-    maxHeight: 'auto',
+    maxHeight: '250px',
     width: 'auto',
     minWidth: '0',
     translate: 'yes',

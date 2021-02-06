@@ -32,6 +32,7 @@ export class MypostsComponent implements OnInit {
   onNew() {
     const dialogRef = this.dialog.open(PosteditorComponent, {
       width: '60%',
+      height: '80%',
       data: { new: true }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -41,7 +42,10 @@ export class MypostsComponent implements OnInit {
 
   onEdit(post: DataSnapshot) {
     const dialogRef = this.dialog.open(PosteditorComponent, {
-      width: '60%',
+      width: 'auto',
+      height: 'auto',
+      maxHeight: '80vh',
+      maxWidth:'80vw',
       data: { edit: post }
     });
     dialogRef.afterClosed().subscribe(result => {
