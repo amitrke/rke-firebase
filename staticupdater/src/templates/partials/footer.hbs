@@ -5,6 +5,28 @@
       <a href="#">Back to top</a>
     </p>
   </footer>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
+    authDomain: "myrke-189201.firebaseapp.com",
+    databaseURL: "https://myrke-189201.firebaseio.com",
+    projectId: "myrke-189201",
+    storageBucket: "myrke-189201.appspot.com",
+    messagingSenderId: "670134176077",
+    appId: "1:670134176077:web:9ee500127a2e0e0b558f04",
+    measurementId: "G-Z48Q0SRCJB"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
 <script>
       $.ajax({
         url: "https://myrke-189201.firebaseio.com/weather/roorkee-in/current.json",
