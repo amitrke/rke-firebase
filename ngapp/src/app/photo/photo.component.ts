@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DataSnapshot } from '@angular/fire/database/interfaces';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
@@ -14,6 +14,8 @@ export class PhotoComponent implements OnInit {
 
   @Input() public photo: DataSnapshot;
   @Input() public thumb: boolean;
+  @Input() public readonly: boolean;
+  @Output() edit = new EventEmitter<DataSnapshot>();
   public photoObj: Photo;
   public photoUrl: Observable<any>;
 
@@ -30,6 +32,10 @@ export class PhotoComponent implements OnInit {
       const storageRef = this.storage.ref(path);
       this.photoUrl = storageRef.getDownloadURL();
     }
+  }
+
+  onEdit() {
+    this.edit.emit(this.photo);
   }
 
   onDelete() {
