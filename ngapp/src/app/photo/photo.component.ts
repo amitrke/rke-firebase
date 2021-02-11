@@ -14,10 +14,13 @@ export class PhotoComponent implements OnInit {
 
   @Input() public photo: DataSnapshot;
   @Input() public thumb: boolean;
+  @Input() public size: string;
   @Input() public readonly: boolean;
   @Output() edit = new EventEmitter<DataSnapshot>();
   public photoObj: Photo;
   public photoUrl: Observable<any>;
+  private maxWidth = "100%";
+  private maxHeight = "100%";
 
   constructor(private storage: AngularFireStorage, private photoService: PhotoService) { }
 
@@ -26,12 +29,27 @@ export class PhotoComponent implements OnInit {
     console.log(`MyPhoto is ${JSON.stringify(this.photo)} ${this.photoObj.path}`);
     if (this.photoObj.path) {
       let path = this.photoObj.path;
-      if (this.thumb) {
+      if (this.size) {
+        if (this.size == 'thumb') {
+          path = Photo.getThumbPath(path);
+        } else if (this.size == 'med') {
+          this.maxWidth = "680px";
+          this.maxHeight = "680px";
+          path = Photo.getMedPath(path);
+        } else {
+          console.error(`Unknown size ${this.size}`);
+        }
+      } else if (this.thumb) {
         path = Photo.getThumbPath(path);
       }
       const storageRef = this.storage.ref(path);
       this.photoUrl = storageRef.getDownloadURL();
     }
+  }
+
+  applyStyles() {
+    const styles = {'max-width' : this.maxWidth, 'max-height': this.maxHeight};
+    return styles;
   }
 
   onEdit() {

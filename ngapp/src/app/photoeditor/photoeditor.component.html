@@ -11,20 +11,21 @@
         <mat-error *ngIf="photoForm.invalid">Title is required</mat-error>
     </mat-form-field>
     <mat-form-field>
+        Album:
+        <input matInput type="text" formControlName="album">
+    </mat-form-field>
+    <mat-form-field>
         Description:
-        <input matInput type="text" formControlName="description" required>
-        <mat-error *ngIf="photoForm.invalid">Description is required</mat-error>
+        <input matInput type="text" formControlName="description">
     </mat-form-field>
     <mat-slide-toggle formControlName="publish" color="primary">Publish</mat-slide-toggle>
 
-    <app-photo *ngIf="photoObserver | async as photo" [photo]="photo" [readonly]="true" [thumb]="true"></app-photo>
+    <app-photo *ngIf="photoObserver | async as photo" [photo]="photo" [readonly]="true" [size]="med"></app-photo>
 
-    <div *ngIf="editPhotoId; else uploadBlocked">
-        <label for="file">File:</label>
-        <input type="file" (change)="upload($event, user)" accept=".png,.jpg" />
-        <progress max="100" [value]="(uploadProgress | async)"></progress>
-    </div>
-    <ng-template #uploadBlocked>Title and description needs to be saved before you can upload image.</ng-template>
+    <label for="file">File:</label>
+    <input type="file" (change)="onFileChanges($event)" accept=".png,.jpg" />
+    <progress max="100" [value]="(uploadProgress | async)"></progress>
+    
     <div>
         <button mat-button (click)="onSave()">Save</button>
         <button mat-button (click)="onCancel()">Cancel</button>

@@ -6,6 +6,7 @@ export class Photo extends BaseModel {
   public publish: boolean;
   public description: string;
   public title: string;
+  public album: string;
 
   constructor(
     public path: string, 

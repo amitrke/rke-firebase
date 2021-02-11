@@ -7,7 +7,7 @@ import { User } from './models/user.model';
 import { UserDbItem } from './models/types';
 export abstract class BaseService<T extends BaseModel> {
 
-  protected user: User;
+  public user: User;
   public items: Observable<SnapshotAction<T>[]> = new Observable();
   public allUsersItems: Observable<UserDbItem[]> = new Observable();
 
