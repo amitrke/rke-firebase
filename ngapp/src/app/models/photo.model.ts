@@ -3,8 +3,15 @@ import { BaseModel } from '../models/base.model';
 export class Photo extends BaseModel {
 
   public url: string;
-  
-  constructor(public path: string, public filename: string, public updated: Date){
+  public publish: boolean;
+  public description: string;
+  public title: string;
+  public album: string;
+
+  constructor(
+    public path: string, 
+    public filename: string, 
+    public updated: Date){
     super(updated);
   }
 

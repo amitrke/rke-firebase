@@ -1,16 +1,14 @@
 <div *ngIf="auth.user$ | async as user">
-    <label for="file">File:</label>
-    <input type="file" (change)="upload($event, user)" accept=".png,.jpg" />
-    <progress max="100" [value]="(uploadProgress | async)"></progress>
-    <div class="result" *ngIf="downloadURL | async; let uploadSrc">
-        <a [href]="uploadSrc">You just uploaded this file!</a>
-    </div>
+    
+    <button (click)="onNew()" class="mat-fab-bottom-right" mat-fab>
+        <mat-icon class="icon">add</mat-icon>
+    </button>
 </div>
 
 Your photos
 
 <div id="photos">
     <div class="photo" *ngFor="let photo of photoService.items | async">
-        <app-photo [photo]="photo.payload" [thumb]="true"></app-photo>
+        <app-photo [photo]="photo.payload" (edit)="onEdit($event)" [thumb]="true"></app-photo>
      </div>
 </div>

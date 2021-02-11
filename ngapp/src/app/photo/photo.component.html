@@ -1,4 +1,7 @@
-<img src="{{photoUrl | async}}" alt="{{photoObj.filename}}"/>
-<button mat-fab color="accent" >
+<img src="{{photoUrl | async}}" alt="{{photoObj.filename}}" [ngStyle]="applyStyles()"/>
+<button mat-fab color="accent" *ngIf="!readonly" >
+    <mat-icon (click)="onEdit()">edit</mat-icon>
+</button>
+<button mat-fab color="accent" *ngIf="!readonly" >
     <mat-icon (click)="onDelete()">delete</mat-icon>
 </button>
