@@ -5,3 +5,10 @@
         height: 250px;
     }
 }
+
+.addPhotos {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    width: 100%;
+}

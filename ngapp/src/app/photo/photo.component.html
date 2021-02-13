@@ -1,7 +1,9 @@
 <img src="{{photoUrl | async}}" alt="{{photoObj.filename}}" [ngStyle]="applyStyles()"/>
-<button mat-fab color="accent" *ngIf="!readonly" >
-    <mat-icon (click)="onEdit()">edit</mat-icon>
-</button>
-<button mat-fab color="accent" *ngIf="!readonly" >
-    <mat-icon (click)="onDelete()">delete</mat-icon>
-</button>
+
+<div class="icon-row">
+    <button mat-icon-button *ngIf="!readonly" >
+        <mat-icon (click)="onEdit()">edit</mat-icon>
+        <mat-icon (click)="onDelete()">delete</mat-icon>
+        [Album: {{photoObj.album}}]
+    </button>
+</div>
