@@ -83,11 +83,18 @@ function processPhotos(photos: any, users: any) {
     _.forEach(userPhotos, (photo: any, photoId: string) => {
       if (photo.publish == true && photo.album && photo.album.trim() != ""){
         if (!albums[photo.album]) {
-          albums[photo.album] = [];
+          albums[photo.album] = {
+            user: {
+              id: userId,
+              name: users[userId].name,
+              firstName: users[userId].name.split(" ")[0]
+            },
+            photos: []
+          };
         }
         photo.id=photoId;
         photo.userId = userId;
-        albums[photo.album].push(photo);
+        albums[photo.album].photos.push(photo);
       }
     })
   })
@@ -121,17 +128,18 @@ async function generateAlbumFiles(albums: any) {
   const source = fs.readFileSync("./src/templates/album.hbs", 'utf8');
   const template = handlebars.compile(source, { strict: true });
 
-  _.forEach(albums, async (photos: any[], albumName: string) => {
+  _.forEach(albums, async (albumObj: any, albumName: string) => {
     console.log(albumName);
+    const photos = albumObj.photos;
     const albumNameWithDash = albumName.replace(" ", "-");
-    const dirPath = path.join(__dirname, "..", "..", "public", "albums", albumNameWithDash);
+    const dirPath = path.join(__dirname, "..", "..", "public", "albums", albumObj.user.firstName, albumNameWithDash);
     console.log("Checking for directory " 
               + dirPath);
     const folderExists = fs.existsSync(dirPath);
     console.log(folderExists ? "The directory already exists" 
                       : "Not found!"); 
     if (!folderExists){
-      mkdirSync(dirPath);
+      mkdirSync(dirPath, { recursive: true });
     }
     
     const photoArray:any[] = [];
@@ -140,49 +148,36 @@ async function generateAlbumFiles(albums: any) {
       const pathDotSplit = srcFilename.split('.');
       const fileExtn = pathDotSplit[pathDotSplit.length - 1];
       const file680path = `users/${photo['userId']}/thumbnails/${pathDotSplit[0]}_680x680.${fileExtn}`;
-      const destFilename = `../public/albums/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
+      const destFilename = `../public/albums/${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
       await downloadFile(file680path, destFilename);
       photo['file680path'] = `${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
       photoArray.push(photo);
     }
-    const result = template({ albumName, albumNameWithDash, photoArray });
-    fs.writeFileSync(`../public/albums/${albumNameWithDash}.html`, result);
+    const result = template({ albumObj, albumNameWithDash, photoArray });
+    fs.writeFileSync(`../public/albums/${albumObj.user.firstName}/${albumNameWithDash}.html`, result);
   })
 
 }
 
-// async function generateAlbumLandingPage(albums: any) {
-//   const source = fs.readFileSync("./src/templates/albumLanding.hbs", 'utf8');
-//   const template = handlebars.compile(source, { strict: true });
+async function generateAlbumLandingPage(albums: any) {
+  const source = fs.readFileSync("./src/templates/albumLanding.hbs", 'utf8');
+  const template = handlebars.compile(source, { strict: true });
+  const albumList:any[] = [];
 
-//   _.forEach(albums, async (photos: any[], albumName: string) => {
-//     const albumNameWithDash = albumName.replace(" ", "-");
-//     const dirPath = path.join(__dirname, "..", "..", "public", "albums", albumNameWithDash);
-//     console.log("Checking for directory " 
-//               + dirPath);
-//     const folderExists = fs.existsSync(dirPath);
-//     console.log(folderExists ? "The directory already exists" 
-//                       : "Not found!"); 
-//     if (!folderExists){
-//       mkdirSync(dirPath);
-//     }
-    
-//     const photoArray:any[] = [];
-//     for (const photo of photos){
-//       const srcFilename = photo['filename'] as string;
-//       const pathDotSplit = srcFilename.split('.');
-//       const fileExtn = pathDotSplit[pathDotSplit.length - 1];
-//       const file680path = `users/${photo['userId']}/thumbnails/${pathDotSplit[0]}_680x680.${fileExtn}`;
-//       const destFilename = `../public/albums/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
-//       await downloadFile(file680path, destFilename);
-//       photo['file680path'] = `${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
-//       photoArray.push(photo);
-//     }
-//     const result = template({ albumName, albumNameWithDash, photoArray });
-//     fs.writeFileSync(`../public/albums/${albumNameWithDash}.html`, result);
-//   })
-
-// }
+  _.forEach(albums, async (albumObj: any, albumName: string) => {
+    const albumNameWithDash = albumName.replace(" ", "-");
+    const srcFilename = albumObj.photos[0]['filename'] as string;
+    const pathDotSplit = srcFilename.split('.');
+    albumList.push({
+      albumName,
+      url: `${albumObj.user.firstName}/${albumNameWithDash}.html`,
+      photoUrl: `${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`,
+      userName: albumObj.user.name
+    });
+  })
+  const result = template({ albumList });
+  fs.writeFileSync(`../public/albums/index.html`, result);
+}
 
 async function generateHomepage(posts: any) {
   const source = fs.readFileSync("./src/templates/home.hbs", 'utf8');
@@ -208,6 +203,7 @@ async function asyncCall() {
   const userPosts = processPosts(posts, users);
   await generatePostFiles(userPosts);
   await generateAlbumFiles(albums);
+  await generateAlbumLandingPage(albums);
   await generateHomepage(userPosts);
   app.delete();
 }
