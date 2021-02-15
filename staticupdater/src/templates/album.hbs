@@ -2,7 +2,7 @@
 <html lang="en">
 
 {{>head title=albumName staticResLevel="../."}}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 <body>
   <div class="container">
     {{>topNav}}
@@ -11,17 +11,19 @@
     <div class="album py-5 bg-light">
     <div class="container">
 
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="gallery" data-toggle="modal" data-target="#exampleModal">
         {{#each photoArray}}
         <div class="col">
           <div class="card shadow-sm">
-            <img src="{{file680path}}" class="bd-placeholder-img card-img-top" width="100%" height="225" role="img" focusable="false" />
+            <a href="{{fileFullResPath}}" data-toggle="lightbox">
+              <img src="{{file680path}}" class="bd-placeholder-img card-img-top" width="100%" height="225" role="img" focusable="false" />
+            </a>
             <div class="card-body">
               <p class="card-text">{{description}}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Like</button>
                 </div>
                 <small class="text-muted">9 Likes</small>
               </div>
@@ -33,8 +35,15 @@
     </div>
   </div>
   </main><!-- /.container -->
-
   {{>footer}}
+  <script>
+    $( document ).ready(function() {
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
+    });
+  </script>
 </body>
 
 </html>

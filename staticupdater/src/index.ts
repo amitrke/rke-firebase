@@ -150,7 +150,19 @@ async function generateAlbumFiles(albums: any) {
       const file680path = `users/${photo['userId']}/thumbnails/${pathDotSplit[0]}_680x680.${fileExtn}`;
       const destFilename = `../public/albums/${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
       await downloadFile(file680path, destFilename);
+
+      let file1080path = `users/${photo['userId']}/thumbnails/${pathDotSplit[0]}_1920x1080.jpg`;
+      const dest1080Filename = `../public/albums/${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_1920x1080.jpg`;
+      try{
+        await downloadFile(file1080path, dest1080Filename);
+      } catch(err) {
+        file1080path = `users/${photo['userId']}/${srcFilename}`;
+        await downloadFile(file1080path, dest1080Filename);
+      }
+      
+
       photo['file680path'] = `${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`;
+      photo['fileFullResPath'] = `${albumNameWithDash}/${pathDotSplit[0]}_1920x1080.jpg`;
       photoArray.push(photo);
     }
     const result = template({ albumObj, albumNameWithDash, photoArray });
@@ -172,6 +184,7 @@ async function generateAlbumLandingPage(albums: any) {
       albumName,
       url: `${albumObj.user.firstName}/${albumNameWithDash}.html`,
       photoUrl: `${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`,
+      fileFullResPath: `${albumObj.user.firstName}/${albumNameWithDash}/${pathDotSplit[0]}_680x680.jpg`,
       userName: albumObj.user.name
     });
   })
