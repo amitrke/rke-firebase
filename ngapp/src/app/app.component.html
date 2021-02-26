@@ -13,7 +13,9 @@
         <button mat-icon-button [matMenuTriggerFor]="appMenu">
             <mat-icon>more_vert</mat-icon>
         </button>
-        <a routerLink="/home" class="website-name">Roorkee.org</a>
+        <a href="https://www.roorkee.org/" class="website-name">Roorkee.org</a>
+        &nbsp; >
+        <a routerLink="/home" class="website-name">My Account</a>
         <span class="toolbar-fill-remaining-space"></span>
         <div *ngIf="auth.user$ | async; then authenticated else guest">
             <!-- template will replace this div -->
