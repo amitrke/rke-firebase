@@ -10,7 +10,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": [
-      "esnext.asynciterable"
+      "esnext.asynciterable",
+      "esnext"
     ]
   },
   "compileOnSave": true,
