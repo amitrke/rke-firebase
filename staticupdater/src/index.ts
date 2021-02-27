@@ -131,7 +131,7 @@ async function generateAlbumFiles(albums: any) {
   _.forEach(albums, async (albumObj: any, albumName: string) => {
     console.log(albumName);
     const photos = albumObj.photos;
-    const albumNameWithDash = albumName.replaceAll(" ", "-");
+    const albumNameWithDash = albumName.split(" ").join("-");
     const dirPath = path.join(__dirname, "..", "..", "public", "albums", albumObj.user.firstName, albumNameWithDash);
     console.log("Checking for directory " 
               + dirPath);
@@ -177,7 +177,7 @@ async function generateAlbumLandingPage(albums: any) {
   const albumList:any[] = [];
 
   _.forEach(albums, async (albumObj: any, albumName: string) => {
-    const albumNameWithDash = albumName.replace(" ", "-");
+    const albumNameWithDash = albumName.split(" ").join("-");
     const srcFilename = albumObj.photos[0]['filename'] as string;
     const pathDotSplit = srcFilename.split('.');
     albumList.push({
