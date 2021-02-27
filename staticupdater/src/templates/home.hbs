@@ -6,11 +6,18 @@
 <body>
     <div class="container">
         {{>topNav}}
-        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-            <div class="col-md-6 px-0">
+
+        <div class="jumbotron p-4 p-md-12 text-white rounded bg-dark d-none d-md-block">
+            <div class="col-md-10 px-0">
                 <h1 class="display-4 font-italic">{{homepageConfig.punchlineH1}}</h1>
                 <p class="lead my-3">{{homepageConfig.punchlineP}}
                 </p>
+                <p class="lead mb-0"><a href="{{homepageConfig.punchlineLink}}" class="text-white font-weight-bold">Continue ...</a></p>
+            </div>
+        </div>
+        <div class="smalltron p-4 p-sm-8 text-white rounded bg-dark d-md-none">
+            <div class="col-sm-8 px-0">
+                <h1 class="display-6 font-italic">{{homepageConfig.punchlineH1}}</h1>
                 <p class="lead mb-0"><a href="{{homepageConfig.punchlineLink}}" class="text-white font-weight-bold">Continue ...</a></p>
             </div>
         </div>
@@ -58,7 +65,9 @@
                 <div class="blog-post">
                     <h2 class="blog-post-title">{{homepagePost.title}}</h2>
                     <p class="blog-post-meta">{{homepagePost.displayDate}} by <a href="#">{{homepagePost.userName}}</a></p>
-                    <img src="posts/{{homepagePost.id}}.jpg" style="max-width:500px" />
+                    <img class="d-md-block d-lg-none" src="posts/{{homepagePost.id}}.jpg" style="max-width:400px" />
+                    <img class="d-none d-lg-block d-xl-none" src="posts/{{homepagePost.id}}.jpg" style="max-width:500px" />
+                    <img class="d-none d-xl-block" src="posts/{{homepagePost.id}}.jpg" style="max-width:600px" />
                     <p>{{{homepagePost.body}}}</p>
                 </div><!-- /.blog-post -->
 
