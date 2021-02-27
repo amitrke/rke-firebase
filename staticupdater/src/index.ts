@@ -165,7 +165,7 @@ async function generateAlbumFiles(albums: any) {
       photo['fileFullResPath'] = `${albumNameWithDash}/${pathDotSplit[0]}_1920x1080.jpg`;
       photoArray.push(photo);
     }
-    const result = template({ albumObj, albumNameWithDash, photoArray });
+    const result = template({ title: `Photo Album: ${albumName}`, albumObj, albumNameWithDash, photoArray });
     fs.writeFileSync(`../public/albums/${albumObj.user.firstName}/${albumNameWithDash}.html`, result);
   })
 
@@ -208,6 +208,13 @@ async function generateHomepage(posts: any) {
   fs.writeFileSync(`../public/index.html`, result);
 }
 
+async function generateStaticPages() {
+  const source = fs.readFileSync("./src/templates/404.hbs", 'utf8');
+  const template = handlebars.compile(source, { strict: true });
+  const result = template({});
+  fs.writeFileSync(`../public/404.html`, result);
+}
+
 async function asyncCall() {
   const posts = await readPosts();
   const photos = await readPhotos();
@@ -218,6 +225,7 @@ async function asyncCall() {
   await generateAlbumFiles(albums);
   await generateAlbumLandingPage(albums);
   await generateHomepage(userPosts);
+  await generateStaticPages();
   app.delete();
 }
 
