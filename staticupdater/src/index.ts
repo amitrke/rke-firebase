@@ -131,7 +131,7 @@ async function generateAlbumFiles(albums: any) {
   _.forEach(albums, async (albumObj: any, albumName: string) => {
     console.log(albumName);
     const photos = albumObj.photos;
-    const albumNameWithDash = albumName.replace(" ", "-");
+    const albumNameWithDash = albumName.replaceAll(" ", "-");
     const dirPath = path.join(__dirname, "..", "..", "public", "albums", albumObj.user.firstName, albumNameWithDash);
     console.log("Checking for directory " 
               + dirPath);
