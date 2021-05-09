@@ -19,7 +19,7 @@
     "fs": "0.0.1-security",
     "handlebars": "^4.7.6",
     "html-entities": "^1.4.0",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.2.3",
