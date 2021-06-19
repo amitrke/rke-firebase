@@ -29,22 +29,73 @@
   firebase.analytics();
   var ui = new firebaseui.auth.AuthUI(firebase.auth());
   var provider = new firebase.auth.GoogleAuthProvider();
-  
-  // FirebaseUI config.
-  ui.start('#firebaseui-auth-container', {
-    signInSuccessUrl: "https://www.roorkee.org/",
-    signInOptions: [
-      {
-        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        clientId: '670134176077-lg5hnt95l2ncj0cnogdlth94tqs4l1mj.apps.googleusercontent.com'
+
+  initApp = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var uid = user.uid;
+        var phoneNumber = user.phoneNumber;
+        var providerData = user.providerData;
+        user.getIdToken().then(function(accessToken) {
+          {{!-- document.getElementById('sign-in-status').textContent = 'Signed in';
+          document.getElementById('sign-in').textContent = 'Sign out';
+          document.getElementById('account-details').textContent = JSON.stringify({
+            displayName: displayName,
+            email: email,
+            emailVerified: emailVerified,
+            phoneNumber: phoneNumber,
+            photoURL: photoURL,
+            uid: uid,
+            accessToken: accessToken,
+            providerData: providerData
+          }, null, '  '); --}}
+          console.log(JSON.stringify({
+            displayName: displayName,
+            email: email,
+            emailVerified: emailVerified,
+            phoneNumber: phoneNumber,
+            photoURL: photoURL,
+            uid: uid,
+            accessToken: accessToken,
+            providerData: providerData
+          }, null, '  '));
+        });
+      } else {
+        // User is signed out.
+        {{!-- document.getElementById('sign-in-status').textContent = 'Signed out';
+        document.getElementById('sign-in').textContent = 'Sign in';
+        document.getElementById('account-details').textContent = 'null'; --}}
+        console.log("User is not logged in");
+
+        // FirebaseUI config.
+        ui.start('#firebaseui-auth-container', {
+          signInSuccessUrl: "https://www.roorkee.org/",
+          signInOptions: [
+            {
+              provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              clientId: '670134176077-lg5hnt95l2ncj0cnogdlth94tqs4l1mj.apps.googleusercontent.com'
+            }
+          ],
+          // Required to enable one-tap sign-up credential helper.
+          credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+        });
+        // Auto sign-in for returning users is enabled by default except when prompt is
+        // not 'none' in the Google provider custom parameters. To manually disable:
+        ui.disableAutoSignIn();
       }
-    ],
-    // Required to enable one-tap sign-up credential helper.
-    credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+    }, function(error) {
+      console.log(error);
+    });
+  };
+
+  window.addEventListener('load', function() {
+    initApp()
   });
-  // Auto sign-in for returning users is enabled by default except when prompt is
-  // not 'none' in the Google provider custom parameters. To manually disable:
-  ui.disableAutoSignIn();
 </script>
 <script>
       $.ajax({
