@@ -31,15 +31,19 @@
   var provider = new firebase.auth.GoogleAuthProvider();
   
   // FirebaseUI config.
-  var uiConfig = {
-    signInSuccessUrl: 'https://www.roorkee.org/',  // the URL to direct to upon success
-    authMethod: 'https://accounts.google.com',
-    signInOptions: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    // Enable one-tap sign-in.
+  ui.start('#firebaseui-auth-container', {
+    signInOptions: [
+      {
+        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        clientId: '670134176077-lg5hnt95l2ncj0cnogdlth94tqs4l1mj.apps.googleusercontent.com'
+      }
+    ],
+    // Required to enable one-tap sign-up credential helper.
     credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
-  };
-
-  ui.start('#firebaseui-auth-container', uiConfig);
+  });
+  // Auto sign-in for returning users is enabled by default except when prompt is
+  // not 'none' in the Google provider custom parameters. To manually disable:
+  ui.disableAutoSignIn();
 </script>
 <script>
       $.ajax({
