@@ -10,7 +10,9 @@
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.0/firebase-ui-auth.css" />
 <script>
   var firebaseConfig = {
     apiKey: "AIzaSyAgvZh2TZUc_n2dvu0oOo6tUgA1nJzEkwM",
@@ -25,6 +27,54 @@
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
+  var ui = new firebaseui.auth.AuthUI(firebase.auth());
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  initApp = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var uid = user.uid;
+        var phoneNumber = user.phoneNumber;
+        var providerData = user.providerData;
+        user.getIdToken().then(function(accessToken) {
+          document.getElementById("profilePic").src=photoURL;
+        });
+      } else {
+        // User is signed out.
+        {{!-- document.getElementById('sign-in-status').textContent = 'Signed out';
+        document.getElementById('sign-in').textContent = 'Sign in';
+        document.getElementById('account-details').textContent = 'null'; --}}
+        console.log("User is not logged in");
+
+        // FirebaseUI config.
+        ui.start('#firebaseui-auth-container', {
+          signInSuccessUrl: "https://www.roorkee.org/",
+          signInOptions: [
+            {
+              provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              clientId: '670134176077-lg5hnt95l2ncj0cnogdlth94tqs4l1mj.apps.googleusercontent.com'
+            }
+          ],
+          // Required to enable one-tap sign-up credential helper.
+          credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+        });
+        // Auto sign-in for returning users is enabled by default except when prompt is
+        // not 'none' in the Google provider custom parameters. To manually disable:
+        ui.disableAutoSignIn();
+      }
+    }, function(error) {
+      console.log(error);
+    });
+  };
+
+  window.addEventListener('load', function() {
+    initApp()
+  });
 </script>
 <script>
       $.ajax({
